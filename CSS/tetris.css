@@ -11,22 +11,23 @@ body {
 
 .contenedor-juego {
     position: relative;
-    width: 90%; /* Ancho relativo */
-    max-width: 300px; /* Tamaño máximo */
-    height: auto; /* Permite ajustar la altura */
+    width: 90%; 
+    max-width: 300px; 
+    height: auto; 
     background-color: #1a237e;
-    margin: 20px auto; /* Espaciado para dispositivos pequeños */
+    margin: 20px auto; 
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 10px 0;
 }
 
 .cabecera-juego {
     display: flex;
     justify-content: space-between;
-    width: 100%; /* Ajusta al contenedor */
+    width: 100%; 
     padding: 10px;
-    box-sizing: border-box; /* Incluye padding en el ancho */
+    box-sizing: border-box; 
 }
 
 .contenedor-puntaje {
@@ -40,8 +41,8 @@ body {
 
 #tablero-juego {
     width: 100%;
-    max-width: 240px; /* Tamaño máximo */
-    aspect-ratio: 8 / 15; /* Relación de aspecto para mantener proporción */
+    max-width: 240px; 
+    aspect-ratio: 8 / 15; 
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(15, 1fr);
@@ -49,6 +50,7 @@ body {
     background-color: #1a237e;
     border: 1px solid rgba(255, 255, 255, 0.3);
     margin-top: 10px;
+    margin-bottom: 15px;
 }
 
 .celda {
@@ -68,30 +70,60 @@ body {
 .pieza-J { background-color: #2196f3; }
 .pieza-L { background-color: #ff9800; }
 
+
+
+.controles-tactiles {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 0;
+}
+
+.controles-tactiles button {
+    background-color: #1a237e;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1.5em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.controles-tactiles button:active {
+    background-color: #3949ab;
+}
+
+
+
 /* Media Queries para ajustar en dispositivos pequeños */
 @media (max-width: 768px) {
     .cabecera-juego {
-        flex-direction: column; /* Columnas en lugar de filas */
+        flex-direction: column; 
         align-items: center;
         gap: 10px;
     }
 
     .contenedor-puntaje {
-        font-size: 0.7em; /* Reduce tamaño del texto */
+        font-size: 0.7em; 
     }
 
     #tablero-juego {
-        max-width: 200px; /* Reduce tamaño del tablero */
+        max-width: 200px; 
     }
 }
 
+
+
 @media (max-width: 480px) {
     .contenedor-puntaje {
-        font-size: 0.6em; /* Texto aún más pequeño */
+        font-size: 0.6em; 
         padding: 3px;
     }
 
     #tablero-juego {
-        max-width: 160px; /* Reduce más el tablero */
+        max-width: 160px; 
     }
 }
+
