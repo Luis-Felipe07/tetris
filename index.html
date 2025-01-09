@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Juega Tetris, el clásico juego de puzzles, optimizado para dispositivos móviles y desktop. Compite por puntos y mejora tus habilidades.">
+    <meta name="keywords" content="Tetris, juego online, puzzle, HTML5, juego gratuito">
+    <meta name="author" content="Luis Barrios">
+    <meta name="robots" content="index, follow">
+    <title>Juega Tetris | Diviértete con mi version de Tetris</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="/img/logo.ico" type="image/x-icon">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/CSS/tetris.css">
+</head>
+<body>
+    <!-- Contenedor principal del juego -->
+    <div class="contenedor-juego">
+        <div class="cabecera-juego">
+            <div class="contenedor-puntaje">
+                Movimientos: <span id="movimientos">0</span>
+            </div>
+            <div class="contenedor-puntaje">
+                Meta: <span id="meta">2000</span>
+            </div>
+            <div class="contenedor-puntaje">
+                Puntos: <span id="puntaje">0</span>
+            </div>
+        </div>
+        <div class="contenedor-puntaje">
+            Nivel: <span id="nivel">1</span>
+        </div>
+        
+        <div id="tablero-juego"></div>
+    </div>
+
+    <!-- ANUNCIOS GOOGLE -->
+
+
+    <script src="/JS/tetris.js"></script>
+</body>
+</html>

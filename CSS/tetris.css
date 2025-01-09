@@ -1,0 +1,97 @@
+body {
+    margin: 0;
+    background-color: #1a237e;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+
+.contenedor-juego {
+    position: relative;
+    width: 90%; /* Ancho relativo */
+    max-width: 300px; /* Tamaño máximo */
+    height: auto; /* Permite ajustar la altura */
+    background-color: #1a237e;
+    margin: 20px auto; /* Espaciado para dispositivos pequeños */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.cabecera-juego {
+    display: flex;
+    justify-content: space-between;
+    width: 100%; /* Ajusta al contenedor */
+    padding: 10px;
+    box-sizing: border-box; /* Incluye padding en el ancho */
+}
+
+.contenedor-puntaje {
+    background-color: #1a237e;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    font-size: 0.8em;
+    text-align: center;
+}
+
+#tablero-juego {
+    width: 100%;
+    max-width: 240px; /* Tamaño máximo */
+    aspect-ratio: 8 / 15; /* Relación de aspecto para mantener proporción */
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(15, 1fr);
+    gap: 1px;
+    background-color: #1a237e;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
+}
+
+.celda {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pieza {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.pieza-I { background-color: #00bcd4; }
+.pieza-O { background-color: #ffeb3b; }
+.pieza-T { background-color: #9c27b0; }
+.pieza-S { background-color: #4caf50; }
+.pieza-Z { background-color: #f44336; }
+.pieza-J { background-color: #2196f3; }
+.pieza-L { background-color: #ff9800; }
+
+/* Media Queries para ajustar en dispositivos pequeños */
+@media (max-width: 768px) {
+    .cabecera-juego {
+        flex-direction: column; /* Columnas en lugar de filas */
+        align-items: center;
+        gap: 10px;
+    }
+
+    .contenedor-puntaje {
+        font-size: 0.7em; /* Reduce tamaño del texto */
+    }
+
+    #tablero-juego {
+        max-width: 200px; /* Reduce tamaño del tablero */
+    }
+}
+
+@media (max-width: 480px) {
+    .contenedor-puntaje {
+        font-size: 0.6em; /* Texto aún más pequeño */
+        padding: 3px;
+    }
+
+    #tablero-juego {
+        max-width: 160px; /* Reduce más el tablero */
+    }
+}
