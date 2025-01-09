@@ -43,19 +43,20 @@ class Tetris {
     crearTablero() {
         const tablero = document.getElementById('tablero-juego');
         tablero.innerHTML = '';
-        for (let i = 0; i < 15; i++) {
-            for (let j = 0; j < 8; j++) {
+        for (let fila = 0; fila < 15; fila++) {
+            for (let columna = 0; columna < 8; columna++) {
                 const celda = document.createElement('div');
                 celda.className = 'celda';
-                celda.id = `celda-${i}-${j}`;
+                celda.id = `celda-${fila}-${columna}`;
                 tablero.appendChild(celda);
             }
         }
     }
 
     vincularControles() {
-        document.addEventListener('keydown', (e) => {
-            switch (e.key) {
+        // Controles de teclado
+        document.addEventListener('keydown', (evento) => {
+            switch (evento.key) {
                 case 'ArrowLeft':
                     this.moverPieza(-1);
                     break;
@@ -70,6 +71,55 @@ class Tetris {
                     break;
             }
         });
+
+        // Controles táctiles por botones
+        document.getElementById('btn-izquierda').addEventListener('click', () => {
+            this.moverPieza(-1);
+        });
+        document.getElementById('btn-derecha').addEventListener('click', () => {
+            this.moverPieza(1);
+        });
+        document.getElementById('btn-abajo').addEventListener('click', () => {
+            this.moverAbajo();
+        });
+        document.getElementById('btn-rotar').addEventListener('click', () => {
+            this.rotarPieza();
+        });
+
+        // Gestos táctiles
+        let inicioX = 0, inicioY = 0;
+        const tablero = document.getElementById('tablero-juego');
+
+        tablero.addEventListener('touchstart', (evento) => {
+            const toque = evento.touches[0];
+            inicioX = toque.clientX;
+            inicioY = toque.clientY;
+        });
+
+        tablero.addEventListener('touchend', (evento) => {
+            const toque = evento.changedTouches[0];
+            const diferenciaX = toque.clientX - inicioX;
+            const diferenciaY = toque.clientY - inicioY;
+
+            if (Math.abs(diferenciaX) > Math.abs(diferenciaY)) {
+                if (diferenciaX > 0) {
+                    this.moverPieza(1); // Deslizar a la derecha
+                } else {
+                    this.moverPieza(-1); // Deslizar a la izquierda
+                }
+            } else {
+                if (diferenciaY > 0) {
+                    this.moverAbajo(); // Deslizar hacia abajo
+                } else {
+                    this.rotarPieza(); // Deslizar hacia arriba
+                }
+            }
+        });
+
+        // Prevenir comportamientos predeterminados (como desplazamiento en móviles)
+        tablero.addEventListener('touchmove', (evento) => {
+            evento.preventDefault();
+        }, { passive: false });
     }
 
     configurarBotonReinicio() {
@@ -95,7 +145,7 @@ class Tetris {
         this.nivel = Math.floor(this.puntaje / 2000) + 1;
 
         if (this.nivel > nivelAnterior) {
-            swal(`¡Has alcanzado el nivel ${this.nivel}!`);//esto hay que cambiarlo por algo mejor mas bonito
+            swal(`¡Has alcanzado el nivel ${this.nivel}!`);
             this.actualizarNivel();
             this.ajustarVelocidad();
         }
@@ -108,8 +158,8 @@ class Tetris {
     }
 
     generarPieza() {
-        const piezas = Object.keys(this.piezas);
-        const piezaAleatoria = piezas[Math.floor(Math.random() * piezas.length)];
+        const tiposPiezas = Object.keys(this.piezas);
+        const piezaAleatoria = tiposPiezas[Math.floor(Math.random() * tiposPiezas.length)];
         this.piezaActual = {
             forma: this.piezas[piezaAleatoria],
             tipo: piezaAleatoria,
@@ -126,26 +176,26 @@ class Tetris {
         this.dibujarTablero();
     }
 
-    verificarColision(offsetX = 0, offsetY = 0, nuevaForma = null) {
+    verificarColision(desplazamientoX = 0, desplazamientoY = 0, nuevaForma = null) {
         const forma = nuevaForma || this.piezaActual.forma;
 
-        for (let y = 0; y < forma.length; y++) {
-            for (let x = 0; x < forma[y].length; x++) {
-                if (forma[y][x]) {
-                    const nuevoX = this.piezaActual.x + x + offsetX;
-                    const nuevoY = this.piezaActual.y + y + offsetY;
+        for (let fila = 0; fila < forma.length; fila++) {
+            for (let columna = 0; columna < forma[fila].length; columna++) {
+                if (forma[fila][columna]) {
+                    const nuevaX = this.piezaActual.x + columna + desplazamientoX;
+                    const nuevaY = this.piezaActual.y + fila + desplazamientoY;
 
-                    if (nuevoX < 0 || nuevoX >= 8 || nuevoY >= 15) return true;
-                    if (nuevoY >= 0 && this.tablero[nuevoY][nuevoX]) return true;
+                    if (nuevaX < 0 || nuevaX >= 8 || nuevaY >= 15) return true;
+                    if (nuevaY >= 0 && this.tablero[nuevaY][nuevaX]) return true;
                 }
             }
         }
         return false;
     }
 
-    moverPieza(dir) {
-        if (!this.verificarColision(dir, 0)) {
-            this.piezaActual.x += dir;
+    moverPieza(direccion) {
+        if (!this.verificarColision(direccion, 0)) {
+            this.piezaActual.x += direccion;
             this.dibujarTablero();
         }
     }
@@ -163,7 +213,7 @@ class Tetris {
 
     rotarPieza() {
         const nuevaForma = this.piezaActual.forma[0]
-            .map((_, i) => this.piezaActual.forma.map(fila => fila[fila.length - 1 - i]));
+            .map((_, indice) => this.piezaActual.forma.map(fila => fila[fila.length - 1 - indice]));
 
         if (!this.verificarColision(0, 0, nuevaForma)) {
             this.piezaActual.forma = nuevaForma;
@@ -172,12 +222,12 @@ class Tetris {
     }
 
     fijarPieza() {
-        for (let y = 0; y < this.piezaActual.forma.length; y++) {
-            for (let x = 0; x < this.piezaActual.forma[y].length; x++) {
-                if (this.piezaActual.forma[y][x]) {
-                    const tableroY = this.piezaActual.y + y;
+        for (let fila = 0; fila < this.piezaActual.forma.length; fila++) {
+            for (let columna = 0; columna < this.piezaActual.forma[fila].length; columna++) {
+                if (this.piezaActual.forma[fila][columna]) {
+                    const tableroY = this.piezaActual.y + fila;
                     if (tableroY >= 0) {
-                        this.tablero[tableroY][this.piezaActual.x + x] = this.piezaActual.tipo;
+                        this.tablero[tableroY][this.piezaActual.x + columna] = this.piezaActual.tipo;
                     }
                 }
             }
@@ -185,9 +235,9 @@ class Tetris {
     }
 
     limpiarLineas() {
-        for (let y = 14; y >= 0; y--) {
-            if (this.tablero[y].every(celda => celda)) {
-                this.tablero.splice(y, 1);
+        for (let fila = 14; fila >= 0; fila--) {
+            if (this.tablero[fila].every(celda => celda)) {
+                this.tablero.splice(fila, 1);
                 this.tablero.unshift(Array(8).fill(0));
                 this.puntaje += 100;
                 this.actualizarPuntaje();
@@ -196,22 +246,22 @@ class Tetris {
     }
 
     dibujarTablero() {
-        for (let y = 0; y < 15; y++) {
-            for (let x = 0; x < 8; x++) {
-                const celda = document.getElementById(`celda-${y}-${x}`);
+        for (let fila = 0; fila < 15; fila++) {
+            for (let columna = 0; columna < 8; columna++) {
+                const celda = document.getElementById(`celda-${fila}-${columna}`);
                 celda.className = 'celda';
-                if (this.tablero[y][x]) {
-                    celda.classList.add('pieza', this.colores[this.tablero[y][x]]);
+                if (this.tablero[fila][columna]) {
+                    celda.classList.add('pieza', this.colores[this.tablero[fila][columna]]);
                 }
             }
         }
 
         if (this.piezaActual) {
-            for (let y = 0; y < this.piezaActual.forma.length; y++) {
-                for (let x = 0; x < this.piezaActual.forma[y].length; x++) {
-                    if (this.piezaActual.forma[y][x]) {
-                        const tableroY = this.piezaActual.y + y;
-                        const tableroX = this.piezaActual.x + x;
+            for (let fila = 0; fila < this.piezaActual.forma.length; fila++) {
+                for (let columna = 0; columna < this.piezaActual.forma[fila].length; columna++) {
+                    if (this.piezaActual.forma[fila][columna]) {
+                        const tableroY = this.piezaActual.y + fila;
+                        const tableroX = this.piezaActual.x + columna;
                         if (tableroY >= 0) {
                             const celda = document.getElementById(`celda-${tableroY}-${tableroX}`);
                             celda.classList.add('pieza', this.colores[this.piezaActual.tipo]);
